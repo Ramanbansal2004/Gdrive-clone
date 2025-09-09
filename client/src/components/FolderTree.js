@@ -1,0 +1,49 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+
+const FolderTree = ({setFolderBool, currentFolder}) => {
+  const { token } = useAuth();
+  const [folders, setFolders] = useState([]);
+  const [newFolder, setNewFolder] = useState({ name: "", parent: currentFolder });
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/folder", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => setFolders(res.data));
+  }, [token]);
+
+  const handleCreateFolder = async () => {
+    if (!newFolder.name) return;
+    const { data } = await axios.post(
+      "http://localhost:5000/folder/create",
+      newFolder,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    setFolderBool(false);
+  };
+
+  return (
+    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 p-6 rounded-lg shadow-lg w-80 z-50">
+      <h3 className="text-xl font-semibold mb-2">New folder</h3>
+      <div className="bg-white p-4 rounded shadow">
+        <input
+          className="w-full mb-2 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          value={newFolder.name}
+          onChange={(e) => setNewFolder({ ...newFolder, name: e.target.value })}
+          placeholder="New folder name"
+        />
+        <button
+          onClick={handleCreateFolder}
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        >
+          Create Folder
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default FolderTree;
