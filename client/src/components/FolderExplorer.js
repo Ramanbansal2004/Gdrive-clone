@@ -37,10 +37,6 @@ const FolderExplorer = () => {
   };
   // Fetch images inside current folder
   useEffect(() => {
-    if (currentFolder === null) {
-      setImages([]); // no images at root level or handle as needed
-      return;
-    }
     axios
       .get(`${process.env.REACT_APP_API_URL_BACKEND}/image/by-folder/${currentFolder}`, {
         headers: { Authorization: `Bearer ${token}` },

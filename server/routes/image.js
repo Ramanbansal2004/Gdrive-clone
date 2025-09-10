@@ -11,10 +11,13 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 router.post('/upload', auth, upload.single('image'), async (req, res) => {
-  const { name, folder } = req.body;
+  let { name, folder } = req.body;
   if (!req.file) return res.status(400).json({ message: 'Image required' });
   const imageUrl = await imgUpload(req.file, "image");
-  const img = new Image({ name, imageUrl, folder, user: req.user._id });
+  if(folder === "null" || folder === "") {
+    folder = null;
+  }
+  const img = new Image({ name, imageUrl, folder:folder, user: req.user._id });
   await img.save();
   res.json(img);
 });
@@ -29,7 +32,11 @@ router.get('/search', auth, async (req, res) => {
 });
 
 router.get('/by-folder/:folderId', auth, async (req, res) => {
-  const images = await Image.find({ user: req.user._id, folder: req.params.folderId });
+  let folder=req.params.folderId;
+  if(folder === "null" || folder === "undefined") {
+    folder = null;
+  }
+  const images = await Image.find({ user: req.user._id, folder:  folder});
   res.json(images);
 });
 
