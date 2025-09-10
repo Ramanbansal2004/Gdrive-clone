@@ -2,14 +2,16 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import FolderTree from "./FolderTree";
-
+import ImageManager from "./ImageManager";
+import AddFolder from "./AddFolder";
 const FolderExplorer = () => {
   const { token } = useAuth();
   const [currentFolder, setCurrentFolder] = useState(null); // null = root
   const [folders, setFolders] = useState([]);
   const [images, setImages] = useState([]);
   const [folderStack, setFolderStack] = useState([]); // to track navigation
-  const [folderBool, setFolderBool] = useState(false);
+  const [imageBool, setImageBool] = useState(false);
+  const [search, setSearch] = useState("");
   // Fetch folders inside current folder
   useEffect(() => {
     axios
@@ -24,7 +26,14 @@ const FolderExplorer = () => {
         setFolders(filtered);
       });
   }, [currentFolder, token]);
-
+  const handleSearch = async () => {
+    if (!search) return;
+    const { data } = await axios.get(
+      `http://localhost:5000/image/search?query=${search}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    setImages(data);
+  };
   // Fetch images inside current folder
   useEffect(() => {
     if (currentFolder === null) {
@@ -53,6 +62,20 @@ const FolderExplorer = () => {
 
   return (
     <div className="min-h-screen flex flex-col p-4 gap-6 bg-gray-50">
+       <div className="flex gap-2 mb-3">
+          <input
+            value={search}
+            placeholder="Image Name"
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-1 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <button
+            onClick={handleSearch}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+          >
+            Search
+          </button>
+        </div>
       {/* Navigation */}
       <div className="flex items-center gap-4">
         <button
@@ -70,7 +93,7 @@ const FolderExplorer = () => {
           {currentFolder ? `Folder ID: ${currentFolder}` : "Root Folder"}
         </span>
       </div>
-      {folderBool && <FolderTree setFolderBool={setFolderBool} currentFolder={currentFolder}/>}
+      {imageBool && <ImageManager setImageBool={setImageBool} currentFolder={currentFolder}/>}
       {/* Folder List - Top half */}
       <div className="bg-white rounded shadow p-4 max-h-[40vh] overflow-y-auto">
         <h2 className="text-xl font-semibold mb-3">Folders</h2>
@@ -102,77 +125,13 @@ const FolderExplorer = () => {
                 </span>
               </button>
             ))}
-            <button className="flex flex-col items-center p-3 bg-yellow-100 rounded-lg shadow cursor-pointer hover:bg-yellow-200 transition" onClick={()=>{
-                setFolderBool(true);
-            }}>
-              {/* Folder Icon - simple SVG */}
-
-              <span className="text-center text-sm font-medium truncate w-full">
-                New Folder
-              </span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 mb-2 text-yellow-600"
-                fill="none"
-                viewBox="0 0 32 32"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                {/* Folder outline */}
-                <rect
-                  x="6"
-                  y="10"
-                  width="20"
-                  height="12"
-                  rx="3"
-                  stroke="currentColor"
-                  fill="none"
-                />
-                <path
-                  d="M6 13V10c0-1.66 1.34-3 3-3h5l2 3h8c1.1 0 2 .9 2 2v1"
-                  stroke="currentColor"
-                  fill="none"
-                />
-
-                {/* Add circle */}
-                <circle
-                  cx="24"
-                  cy="22"
-                  r="5"
-                  stroke="currentColor"
-                  fill="none"
-                />
-
-                {/* Plus sign */}
-                <line
-                  x1="24"
-                  y1="20.5"
-                  x2="24"
-                  y2="23.5"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                />
-                <line
-                  x1="22.5"
-                  y1="22"
-                  x2="25.5"
-                  y2="22"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
+            <AddFolder currentFolder={currentFolder}/>
           </div>
       </div>
 
       {/* Images - Bottom half */}
       <div className="bg-white rounded shadow p-4 flex-1 overflow-y-auto">
         <h2 className="text-xl font-semibold mb-3">Images</h2>
-        {images.length === 0 && (
-          <p className="text-gray-500">No images in this folder</p>
-        )}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {images.map((img) => (
             <div
@@ -189,6 +148,20 @@ const FolderExplorer = () => {
               />
             </div>
           ))}
+          {currentFolder && <div
+              className="flex flex-col items-center bg-gray-50 p-3 rounded shadow hover:shadow-md" onClick={()=>{
+                setImageBool(true);
+              }}
+            >
+              <span className="text-sm font-medium mb-2 truncate">
+                Upload Image
+              </span>
+              <img
+                src="/"
+                alt="Add Image"
+                className="w-24 h-24 object-cover rounded"
+              />
+            </div>}
         </div>
       </div>
     </div>

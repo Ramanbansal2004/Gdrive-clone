@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 
-const FolderTree = ({setFolderBool, currentFolder}) => {
+const FolderTree = ({ setFolderBool, currentFolder }) => {
   const { token } = useAuth();
   const [folders, setFolders] = useState([]);
-  const [newFolder, setNewFolder] = useState({ name: "", parent: currentFolder });
+  const [newFolder, setNewFolder] = useState({
+    name: "",
+    parent: currentFolder,
+  });
 
   useEffect(() => {
     axios
@@ -35,12 +38,20 @@ const FolderTree = ({setFolderBool, currentFolder}) => {
           onChange={(e) => setNewFolder({ ...newFolder, name: e.target.value })}
           placeholder="New folder name"
         />
-        <button
-          onClick={handleCreateFolder}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-        >
-          Create Folder
-        </button>
+        <div className="flex gap-2 mt-4">
+          <button
+            onClick={handleCreateFolder}
+            className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          >
+            Create Folder
+          </button>
+          <button
+            onClick={() => setFolderBool(false)}
+            className="flex-1 bg-gray-400 text-white py-2 rounded hover:bg-gray-500 transition"
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   );
