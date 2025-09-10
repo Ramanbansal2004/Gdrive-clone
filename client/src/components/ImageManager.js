@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { useFolder } from "../context/FolderContext";
 
 const ImageManager = ({ currentFolder, setImageBool }) => {
   const { token } = useAuth();
   const [name, setName] = useState("");
   const [file, setFile] = useState(null);
-  const [images, setImages] = useState([]);
-  const [search, setSearch] = useState("");
+  const { images, setImages } = useFolder();
   const fileInputRef = useRef();
   // Fetch images by folder
   useEffect(() => {
     if (currentFolder)
       axios
-        .get(`http://localhost:5000/image/by-folder/${currentFolder}`, {
+        .get(`${process.env.REACT_APP_API_URL_BACKEND}/image/by-folder/${currentFolder}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => setImages(res.data));
@@ -27,7 +27,7 @@ const ImageManager = ({ currentFolder, setImageBool }) => {
     form.append("folder", currentFolder);
     form.append("image", file);
     const { data } = await axios.post(
-      "http://localhost:5000/image/upload",
+      `${process.env.REACT_APP_API_URL_BACKEND}/image/upload`,
       form,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -37,17 +37,6 @@ const ImageManager = ({ currentFolder, setImageBool }) => {
     setFile(null);
     setImageBool(false);
   };
-
-  // Search Images
-  const handleSearch = async () => {
-    if (!search) return;
-    const { data } = await axios.get(
-      `http://localhost:5000/image/search?query=${search}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    setImages(data);
-  };
-
   return (
     <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 p-6 rounded-lg shadow-lg w-96 max-h-[80vh] overflow-y-auto z-50">
       <section className="bg-white p-4 rounded-lg shadow">

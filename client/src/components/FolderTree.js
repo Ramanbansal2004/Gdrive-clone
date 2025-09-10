@@ -1,30 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-
+import { useFolder } from "../context/FolderContext";
 const FolderTree = ({ setFolderBool, currentFolder }) => {
   const { token } = useAuth();
-  const [folders, setFolders] = useState([]);
+  const {setFolders}=useFolder();
   const [newFolder, setNewFolder] = useState({
     name: "",
     parent: currentFolder,
   });
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/folder", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => setFolders(res.data));
-  }, [token]);
-
   const handleCreateFolder = async () => {
     if (!newFolder.name) return;
     const { data } = await axios.post(
-      "http://localhost:5000/folder/create",
+      `${process.env.REACT_APP_API_URL_BACKEND}/folder/create`,
       newFolder,
       { headers: { Authorization: `Bearer ${token}` } }
     );
+    setFolders((prev)=>[...prev, data]);
     setFolderBool(false);
   };
 

@@ -6,6 +6,8 @@ import authRoutes from './routes/auth.js';
 import folderRoutes from './routes/folder.js';
 import imageRoutes from './routes/image.js';
 import path from 'path';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const __dirname = path.resolve();
 
@@ -14,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-mongoose.connect('mongodb://localhost:27017/drive_app', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use('/auth', authRoutes);
 app.use('/folder', folderRoutes);

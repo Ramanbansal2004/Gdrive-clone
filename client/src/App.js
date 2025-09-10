@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import {FolderProvider} from "./context/FolderContext";
 import Auth from "./components/Auth";
 import FolderExplorer from "./components/FolderExplorer";
 const Main = () => {
@@ -31,7 +32,9 @@ const Main = () => {
 
 const App = () => (
   <AuthProvider>
-    <Main />
+    <FolderProvider>
+      <Main />
+    </FolderProvider>
   </AuthProvider>
 );
 

@@ -12,11 +12,11 @@ const Auth = () => {
     e.preventDefault();
     try {
       if (isSignup) {
-        await axios.post("http://localhost:5000/auth/signup", form);
+        await axios.post(`${process.env.REACT_APP_API_URL_BACKEND}/auth/signup`, form);
         setIsSignup(false);
       } else {
         const { data } = await axios.post(
-          "http://localhost:5000/auth/login",
+          `${process.env.REACT_APP_API_URL_BACKEND}/auth/login`,
           form
         );
         login(data.token);

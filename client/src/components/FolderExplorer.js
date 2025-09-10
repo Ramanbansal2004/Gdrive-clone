@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-import FolderTree from "./FolderTree";
+import { useFolder } from "../context/FolderContext";
 import ImageManager from "./ImageManager";
 import AddFolder from "./AddFolder";
 const FolderExplorer = () => {
   const { token } = useAuth();
   const [currentFolder, setCurrentFolder] = useState(null); // null = root
-  const [folders, setFolders] = useState([]);
-  const [images, setImages] = useState([]);
+  const { folders, setFolders } = useFolder();
+  const { images, setImages } = useFolder();
   const [folderStack, setFolderStack] = useState([]); // to track navigation
   const [imageBool, setImageBool] = useState(false);
   const [search, setSearch] = useState("");
+  console.log(process.env.REACT_APP_API_URL_BACKEND);
   // Fetch folders inside current folder
   useEffect(() => {
     axios
-      .get("http://localhost:5000/folder", {
+      .get(`${process.env.REACT_APP_API_URL_BACKEND}/folder`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -29,7 +30,7 @@ const FolderExplorer = () => {
   const handleSearch = async () => {
     if (!search) return;
     const { data } = await axios.get(
-      `http://localhost:5000/image/search?query=${search}`,
+      `${process.env.REACT_APP_API_URL_BACKEND}/image/search?query=${search}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     setImages(data);
@@ -41,7 +42,7 @@ const FolderExplorer = () => {
       return;
     }
     axios
-      .get(`http://localhost:5000/image/by-folder/${currentFolder}`, {
+      .get(`${process.env.REACT_APP_API_URL_BACKEND}/image/by-folder/${currentFolder}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setImages(res.data));
@@ -148,7 +149,7 @@ const FolderExplorer = () => {
               />
             </div>
           ))}
-          {currentFolder && <div
+          <div
               className="flex flex-col items-center bg-gray-50 p-3 rounded shadow hover:shadow-md" onClick={()=>{
                 setImageBool(true);
               }}
@@ -161,7 +162,7 @@ const FolderExplorer = () => {
                 alt="Add Image"
                 className="w-24 h-24 object-cover rounded"
               />
-            </div>}
+            </div>
         </div>
       </div>
     </div>
