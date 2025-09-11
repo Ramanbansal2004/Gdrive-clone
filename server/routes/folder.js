@@ -15,5 +15,12 @@ router.get('/', auth, async (req, res) => {
   const folders = await Folder.find({ user: req.user._id });
   res.json(folders);
 });
-
+router.get('/search', auth, async (req, res) => {
+  const { query } = req.query;
+  const folders = await Folder.find({
+    user: req.user._id,
+    name: { $regex: query, $options: 'i' }
+  });
+  res.json(folders);
+});
 export default router;

@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import FolderTree from "./FolderTree";
+import FolderTree from "./utils/FolderTree";
 const AddFolder = ({currentFolder}) => {
   const [folderBool, setFolderBool] = useState(false);
   return (

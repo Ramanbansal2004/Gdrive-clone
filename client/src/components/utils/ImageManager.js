@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext";
-import { useFolder } from "../context/FolderContext";
+import { useAuth } from "../../context/AuthContext";
+import { useFolder } from "../../context/FolderContext";
 
 const ImageManager = ({ currentFolder, setImageBool }) => {
   const { token } = useAuth();

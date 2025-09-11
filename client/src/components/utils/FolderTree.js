@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext";
-import { useFolder } from "../context/FolderContext";
+import { useAuth } from "../../context/AuthContext";
+import { useFolder } from "../../context/FolderContext";
 const FolderTree = ({ setFolderBool, currentFolder }) => {
   const { token } = useAuth();
   const {setFolders}=useFolder();
