@@ -51,14 +51,14 @@ const Auth = () => {
         />
         <button
           type="submit"
-          className="bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition"
+          className="bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition cursor-pointer"
         >
           {isSignup ? "Signup" : "Login"}
         </button>
       </form>
       <button
         onClick={() => setIsSignup((x) => !x)}
-        className="mt-4 w-full text-center text-indigo-600 hover:underline"
+        className="mt-4 w-full text-center text-indigo-600 hover:underline cursor-pointer"
       >
         {isSignup ? "Switch to Login" : "Switch to Signup"}
       </button>
