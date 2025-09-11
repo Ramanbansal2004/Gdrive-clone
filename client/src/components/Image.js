@@ -4,7 +4,8 @@ const Image = ({img}) => {
   return (
     <div
       key={img._id}
-      className="group flex flex-col items-center bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 p-3 w-32"
+      onClick={()=>window.open(img.imageUrl, "_blank")}
+      className="group flex flex-col items-center bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 p-3 w-32 cursor-pointer"
     >
       <div className="relative w-24 h-24 overflow-hidden rounded-xl">
         <img

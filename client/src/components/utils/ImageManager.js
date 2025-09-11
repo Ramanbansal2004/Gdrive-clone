@@ -9,7 +9,6 @@ const ImageManager = ({ currentFolder, setImageBool }) => {
   const [file, setFile] = useState(null);
   const { images, setImages } = useFolder();
   const fileInputRef = useRef();
-  // Fetch images by folder
   useEffect(() => {
     if (currentFolder)
       axios
@@ -18,8 +17,6 @@ const ImageManager = ({ currentFolder, setImageBool }) => {
         })
         .then((res) => setImages(res.data));
   }, [currentFolder, token]);
-
-  // Upload Image
   const handleUpload = async () => {
     if (!file || !name) return;
     const form = new FormData();

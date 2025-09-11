@@ -11,8 +11,6 @@ const AddFolder = ({currentFolder}) => {
           setFolderBool(true);
         }}
       >
-        {/* Folder Icon - simple SVG */}
-
         <span className="text-center text-sm font-medium truncate w-full">
           New Folder
         </span>
@@ -24,7 +22,6 @@ const AddFolder = ({currentFolder}) => {
           stroke="currentColor"
           strokeWidth={2}
         >
-          {/* Folder outline */}
           <rect
             x="6"
             y="10"
@@ -39,11 +36,7 @@ const AddFolder = ({currentFolder}) => {
             stroke="currentColor"
             fill="none"
           />
-
-          {/* Add circle */}
           <circle cx="24" cy="22" r="5" stroke="currentColor" fill="none" />
-
-          {/* Plus sign */}
           <line
             x1="24"
             y1="20.5"

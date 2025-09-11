@@ -21,7 +21,6 @@ const Search = () => {
   };
   return (
     <div className="flex w-full max-w-md">
-      {/* Left Search Button */}
       <button
         onClick={handleSearch}
         className="flex items-center justify-center text-white px-4 rounded-l-full bg-blue-100 hover:bg-blue-200 active:scale-95 transition"

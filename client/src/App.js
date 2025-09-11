@@ -19,7 +19,6 @@ const Main = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-200">
       <nav className="flex items-center justify-between px-4 py-2 bg-white shadow">
-        {/* Left side: Brand + Search */}
         <div className="flex items-center gap-6 flex-1">
           <h1 className="text-xl font-bold text-blue-700 whitespace-nowrap">
             MyDrive
@@ -28,8 +27,6 @@ const Main = () => {
             <Search />
           </div>
         </div>
-
-        {/* Right side: Logout */}
         <button
           onClick={logout}
           className="ml-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
